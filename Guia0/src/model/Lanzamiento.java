@@ -1,8 +1,10 @@
 package model;
 
+import interfaces.Identificable;
+
 import java.util.Objects;
 
-public abstract class Lanzamiento implements Comparable{
+public abstract class Lanzamiento implements Comparable, Identificable {
     private static int total;
     private int id;
     private String titulo;
@@ -20,7 +22,7 @@ public abstract class Lanzamiento implements Comparable{
         this.creador = creador;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -39,7 +41,12 @@ public abstract class Lanzamiento implements Comparable{
     public void setCreador(String creador) {
         this.creador = creador;
     }
-
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Lanzamiento){
+            return this.titulo.compareTo (((Lanzamiento)o).getTitulo());
+        }else return 0;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

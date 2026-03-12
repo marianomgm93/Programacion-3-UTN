@@ -2,7 +2,8 @@ package model;
 
 import exceptions.VersionNegativaException;
 
-public class Juego extends Lanzamiento{
+
+public class Juego extends Lanzamiento {
 
     private int version;
 
@@ -21,10 +22,5 @@ public class Juego extends Lanzamiento{
             throw new VersionNegativaException("La version debe ser positiva");
     }
 
-    @Override
-    public int compareTo(Object o) {
-        if (o instanceof Lanzamiento){
-            return Integer.compare(this.getId(), ((Lanzamiento) o).getId() );
-        }else return 0;
-    }
+
 }
