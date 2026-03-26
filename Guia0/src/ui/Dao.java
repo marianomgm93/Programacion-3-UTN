@@ -11,8 +11,8 @@ import model.Lanzamiento;
 import java.util.*;
 
 public class Dao {
-    public void agregar(Biblioteca b){
         Scanner sc= new Scanner(System.in);
+    public void agregar(Biblioteca b){
         String option;
 
         System.out.println("1\tNuevo Juego\n2\tNueva Expansion\n0\tSalir");
@@ -32,6 +32,8 @@ public class Dao {
                    System.out.println(e.getMessage());
                }
                break;
+           default:
+               System.out.println("Volviendo al menu principal...");
         }
 
     }
@@ -45,9 +47,14 @@ public class Dao {
         genero = sc.nextLine();
         System.out.print("\nIngrese Creador: ");
         creador = sc.nextLine();
-        System.out.print("\nIngrese version: ");
+        System.out.print("\nIngrese version (numero entero): ");
+        try{
         version = sc.nextInt();
         sc.nextLine();
+        }catch(InputMismatchException e){
+            System.out.println("Detectamos un problema, la version del juego quedará en 0, podra modificarla mas tarde");
+            version=0;
+        }
         try{
             Juego juego = new Juego(titulo,genero,creador,version);
             return juego;
@@ -65,7 +72,7 @@ public class Dao {
         genero = sc.nextLine();
         System.out.print("\nIngrese Creador: ");
         creador = sc.nextLine();
-        System.out.print("\nIngrese version: ");
+        System.out.print("\nIngrese fecha: ");
         fechaLanzamiento = sc.nextLine();
 
         try{
@@ -78,12 +85,30 @@ public class Dao {
     }
     public String mostrar(Biblioteca b){
         ArrayList<Lanzamiento> ordenado=new ArrayList<>();
-        ArrayList arregloValores=(ArrayList)((Map)b).values();
-        Collections.sort(arregloValores);
+        Iterator it=b.getListado().values().iterator();
+        while(it.hasNext()){
+            ordenado.add((Lanzamiento)it.next());
+        }
+        Collections.sort(ordenado);
         StringBuilder sb= new StringBuilder();
-        for (Object l: arregloValores){
+        for (Object l: ordenado){
             sb.append(l.toString()).append("\n");
         }
         return sb.toString();
+    }
+    public void eliminar(Biblioteca b){
+        int clave;
+        System.out.println("Ingrese el id a eliminar: ");
+        try{
+            clave=sc.nextInt();
+            sc.nextLine();
+
+        }catch(ArithmeticException e){
+            System.out.println("Debe ingresar un id numerico");
+            clave=-1;
+        }
+        if(clave!=-1)
+        b.getListado().remove(clave);
+        else System.out.println();
     }
 }

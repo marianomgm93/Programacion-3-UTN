@@ -19,7 +19,9 @@ public class Biblioteca <T extends Identificable<Integer>> implements IRepositor
 
     }
 
-
+    public Map<Lanzamiento, Integer> getListado() {
+        return listado;
+    }
 
     @Override
     public void create(Lanzamiento lanzamiento) throws IdentificadorDuplicadoException {
