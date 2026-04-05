@@ -97,17 +97,16 @@ public class Main {
          * con menos de 3 productos.
          */
         /// TODO REHACER
-        /*
+        /**/
 
-
-        System.out.println("Stock por categoria: " +
-                productos.stream()
-                        .collect(Collectors.groupingBy(Producto::getCategoria,Collectors.counting()));
-        return productos.stream().filter(p->p.)
-
-
+            Map<String, Long> cantidadPorCategoria = productos.stream()
+                    .collect(Collectors.groupingBy(Producto::getCategoria, Collectors.counting()));
+        System.out.println("Productos por categoria: "+
+            productos.stream()
+                    .filter(producto -> cantidadPorCategoria.get(producto.getCategoria()) >= 3)
+                    .collect(Collectors.groupingBy(Producto::getCategoria, Collectors.summingInt(Producto::getStock)))
         );
-         */
+
 
         /**
          * 9. Aplicar descuento
