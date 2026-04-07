@@ -1,5 +1,6 @@
 package org.eduardomango.practicaspringweb.model.controllers;
 
+import org.eduardomango.practicaspringweb.model.DTO.SaleRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.SaleEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.SaleNotFoundException;
 import org.eduardomango.practicaspringweb.model.services.SaleService;
@@ -19,8 +20,8 @@ public class SaleController {
     }
 
     @GetMapping
-    public List<SaleEntity> findAll(){
-        return ss.findAll();
+    public ResponseEntity<List<SaleEntity>> findAll(){
+        return ResponseEntity.ok(ss.findAll());
     }
     @GetMapping("/{id}")
     public ResponseEntity<SaleEntity> findById(@PathVariable Long id) throws SaleNotFoundException {
@@ -28,11 +29,11 @@ public class SaleController {
         return ResponseEntity.ok(sale);
     }
     @PostMapping
-    public ResponseEntity<SaleEntity> create(@RequestBody SaleEntity se){
+    public ResponseEntity<SaleEntity> create(@RequestBody SaleRequestDTO sale){
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ss.save(se.getProducts().getId(),se.getClient().getId(), se.getQuantity()));
+                .body(ss.save(sale));
     }
-    @PutMapping("{/id}")
+    @PutMapping("/{id}")
     public ResponseEntity<SaleEntity> update(@PathVariable Long id, @RequestBody SaleEntity sale) throws SaleNotFoundException{
         return ResponseEntity.ok(ss.update(id,sale));
     }

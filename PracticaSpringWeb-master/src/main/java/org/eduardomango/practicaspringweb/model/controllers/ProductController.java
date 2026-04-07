@@ -3,6 +3,8 @@ package org.eduardomango.practicaspringweb.model.controllers;
 import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,28 +18,30 @@ public class ProductController {
         this.ps=ps;
     }
     @GetMapping
-    public List<ProductEntity> findAll(){
-        return ps.findAll();
+    public ResponseEntity<List<ProductEntity>> findAll(){
+        return ResponseEntity.ok(ps.findAll());
     }
 
     @GetMapping("/{id}")
-    public ProductEntity findById(Long id) throws ProductNotFoundException{
-        return ps.findById(id);
+    public ResponseEntity<ProductEntity> findById(Long id) throws ProductNotFoundException{
+        return ResponseEntity.ok(ps.findById(id));
     }
 
     @PostMapping
-    public void create(@RequestBody ProductEntity product){
-        ps.save(product);
+    public ResponseEntity<ProductEntity> create(@RequestBody ProductEntity product){
+        return ResponseEntity.status(HttpStatus.CREATED).body(ps.save(product));
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody ProductEntity product){
+    public ResponseEntity<ProductEntity> update(@PathVariable Long id,@RequestBody ProductEntity product){
         product.setId(id);
         ps.update(product);
+        return ResponseEntity.ok(product);
     }
 
     @DeleteMapping
-    public void delete(@PathVariable Long id) throws ProductNotFoundException{
+    public ResponseEntity<ProductEntity> delete(@PathVariable Long id) throws ProductNotFoundException{
         ProductEntity p = ps.findById(id);
         ps.delete(p);
+        return ResponseEntity.noContent().build();
     }
 }

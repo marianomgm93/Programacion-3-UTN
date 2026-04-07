@@ -44,8 +44,9 @@ public class ProductService {
                 .toList();
     }
 
-    public void save(ProductEntity p) {
+    public ProductEntity save(ProductEntity p) {
         productRepository.save(p);
+        return p;
     }
 
     public void delete(ProductEntity p) {

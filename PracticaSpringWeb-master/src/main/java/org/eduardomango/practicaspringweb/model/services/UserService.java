@@ -44,8 +44,9 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    public void save(UserEntity user) {
+    public UserEntity save(UserEntity user) {
         userRepository.save(user);
+        return user;
     }
 
     public void delete(UserEntity user) {

@@ -1,5 +1,6 @@
 package org.eduardomango.practicaspringweb.model.services;
 
+import org.eduardomango.practicaspringweb.model.DTO.SaleRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
 import org.eduardomango.practicaspringweb.model.entities.SaleEntity;
 import org.eduardomango.practicaspringweb.model.entities.UserEntity;
@@ -10,8 +11,6 @@ import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Service
@@ -45,6 +44,17 @@ public class SaleService {
                 .client(user)
                 .products(prod)
                 .quantity(quantity)
+                .build();
+        saleRepository.save(sale);
+        return sale;
+    }
+    public SaleEntity save(SaleRequestDTO request) throws UserNotFoundException, ProductNotFoundException {
+        UserEntity user=us.findById(request.getIdUser());
+        ProductEntity prod=ps.findById(request.getIdProduct());
+        SaleEntity sale=SaleEntity.builder()
+                .client(user)
+                .products(prod)
+                .quantity(request.getQuantity())
                 .build();
         saleRepository.save(sale);
         return sale;
