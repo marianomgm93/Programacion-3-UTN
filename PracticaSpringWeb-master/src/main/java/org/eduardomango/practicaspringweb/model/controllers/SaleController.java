@@ -23,6 +23,7 @@ public class SaleController {
     public ResponseEntity<List<SaleEntity>> findAll(){
         return ResponseEntity.ok(ss.findAll());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<SaleEntity> findById(@PathVariable Long id) throws SaleNotFoundException {
         SaleEntity sale=ss.findById(id);

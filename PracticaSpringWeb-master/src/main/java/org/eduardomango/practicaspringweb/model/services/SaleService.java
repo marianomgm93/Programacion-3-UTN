@@ -10,6 +10,7 @@ import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -41,10 +42,13 @@ public class SaleService {
         UserEntity user=us.findById(idUser);
         ProductEntity prod=ps.findById(idProduct);
         SaleEntity sale=SaleEntity.builder()
+                .id(saleRepository.findAll().getLast().getId()+1)
                 .client(user)
                 .products(prod)
                 .quantity(quantity)
+                .saleDate(LocalDate.now())
                 .build();
+
         saleRepository.save(sale);
         return sale;
     }
@@ -52,9 +56,11 @@ public class SaleService {
         UserEntity user=us.findById(request.getIdUser());
         ProductEntity prod=ps.findById(request.getIdProduct());
         SaleEntity sale=SaleEntity.builder()
+                .id(saleRepository.findAll().getLast().getId()+1)
                 .client(user)
                 .products(prod)
                 .quantity(request.getQuantity())
+                .saleDate(LocalDate.now())
                 .build();
         saleRepository.save(sale);
         return sale;
