@@ -1,5 +1,8 @@
 package org.eduardomango.practicaspringweb.model.controllers;
 
+import jakarta.validation.Valid;
+import org.apache.catalina.User;
+import org.eduardomango.practicaspringweb.model.DTO.UserRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.UserEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
 import org.eduardomango.practicaspringweb.model.services.UserService;
@@ -28,15 +31,22 @@ public class UserController {
     public ResponseEntity<UserEntity> findById(@PathVariable long id) throws UserNotFoundException {
         return ResponseEntity.ok(us.findById(id));
     }
+    @GetMapping("/search/username")
+    public ResponseEntity<UserEntity> findByUsername(@RequestParam String username){
+        return ResponseEntity.ok(us.findByUsername(username));
+    }
+    @GetMapping("/search/email")
+    public ResponseEntity<UserEntity> findByEmail(@RequestParam String email){
+        return ResponseEntity.ok(us.findByEmail(email));
+    }
+
     @PostMapping
-    public ResponseEntity<UserEntity> create(@RequestBody UserEntity user){
+    public ResponseEntity<UserEntity> create(@Valid @RequestBody UserRequestDTO user){
         return ResponseEntity.status(HttpStatus.CREATED).body(us.save(user));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> update(@PathVariable long id, @RequestBody UserEntity user) throws UserNotFoundException{
-        user.setId(id);
-        us.update(user);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserEntity> update(@PathVariable long id, @Valid @RequestBody UserRequestDTO user) throws UserNotFoundException{
+        return ResponseEntity.ok(us.update(id,user));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<UserEntity> delete(@PathVariable long id) throws UserNotFoundException{

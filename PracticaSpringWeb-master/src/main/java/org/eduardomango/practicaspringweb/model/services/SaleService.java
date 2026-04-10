@@ -4,6 +4,7 @@ import org.eduardomango.practicaspringweb.model.DTO.SaleRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
 import org.eduardomango.practicaspringweb.model.entities.SaleEntity;
 import org.eduardomango.practicaspringweb.model.entities.UserEntity;
+import org.eduardomango.practicaspringweb.model.exceptions.ErrorDetail;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.exceptions.SaleNotFoundException;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
@@ -11,7 +12,9 @@ import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -69,7 +72,7 @@ public class SaleService {
         return saleRepository.findAll()
                 .stream().filter(sale->sale.getId()==id)
                 .findFirst()
-                .orElseThrow(SaleNotFoundException::new);
+                .orElseThrow(()->new SaleNotFoundException("Sale not found"));
     }
     public void delete(Long id) throws SaleNotFoundException{
         SaleEntity sale=findById(id);

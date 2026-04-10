@@ -1,17 +1,18 @@
 package org.eduardomango.practicaspringweb.model.DTO;
 
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 @AllArgsConstructor
 @Getter
 public class SaleRequestDTO {
-    @NonNull
+    @NotBlank(message = "Product id is required")
     private Long idProduct;
-    @NonNull
+    @NotBlank(message = "User id is required")
     private Long idUser;
-    @NonNull
+    @NotBlank(message = "Quantity is required")
     private Long quantity;
 }

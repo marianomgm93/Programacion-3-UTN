@@ -1,12 +1,16 @@
 package org.eduardomango.practicaspringweb.model.services;
 
 
+import org.eduardomango.practicaspringweb.model.DTO.UserRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.UserEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -25,7 +29,7 @@ public class UserService {
                 .stream()
                 .filter(user -> user.getId() == id)
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(()->new UserNotFoundException("User with id= "+id+" not found"));
     }
 
     public UserEntity findByUsername(String username){
@@ -48,6 +52,16 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
+    public UserEntity save(UserRequestDTO user) {
+        UserEntity newUser=UserEntity.builder()
+                .id(userRepository.findAll().getLast().getId()+1)
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
+        userRepository.save(newUser);
+        return newUser;
+    }
 
     public void delete(UserEntity user) {
         userRepository.delete(user);
@@ -55,5 +69,13 @@ public class UserService {
 
     public void update(UserEntity user) {
         userRepository.update(user);
+    }
+    public UserEntity update(Long id, UserRequestDTO user) {
+        UserEntity original=findById(id);
+        original.setUsername(user.getUsername());
+        original.setPassword(user.getPassword());
+        original.setEmail(user.getEmail());
+        userRepository.update(original);
+        return original;
     }
 }

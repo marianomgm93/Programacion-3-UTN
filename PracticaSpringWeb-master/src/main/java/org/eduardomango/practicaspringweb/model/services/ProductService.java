@@ -1,5 +1,6 @@
 package org.eduardomango.practicaspringweb.model.services;
 
+import org.eduardomango.practicaspringweb.model.DTO.ProductRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
@@ -21,23 +22,24 @@ public class ProductService {
     public List<ProductEntity> findAll() {
         return productRepository.findAll();
     }
+
     public ProductEntity findById(long id) {
         return productRepository.findAll()
                 .stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new ProductNotFoundException("Product id= " + id + " not found"));
     }
 
-    public ProductEntity findByName(String name){
+    public ProductEntity findByName(String name) {
         return productRepository.findAll()
                 .stream()
-                .filter(user -> user.getName().equalsIgnoreCase(name))
+                .filter(prod -> prod.getName().equalsIgnoreCase(name))
                 .findFirst()
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new ProductNotFoundException("Product " + name + " not found"));
     }
 
-    public List<ProductEntity> findMoreExpensiveThan(Double price){
+    public List<ProductEntity> findMoreExpensiveThan(Double price) {
         return productRepository.findAll()
                 .stream()
                 .filter(user -> user.getPrice() > price)
@@ -49,11 +51,32 @@ public class ProductService {
         return p;
     }
 
-    public void delete(ProductEntity p) {
+    public ProductEntity save(ProductRequestDTO p) {
+        ProductEntity product = ProductEntity.builder()
+                .id(productRepository.findAll().getLast().getId() + 1)
+                .name(p.getName())
+                .price(p.getPrice())
+                .description(p.getDescription())
+                .build();
+
+        productRepository.save(product);
+        return product;
+    }
+
+    public void delete(ProductEntity p) throws ProductNotFoundException {
         productRepository.delete(p);
     }
 
     public void update(ProductEntity p) {
+
         productRepository.update(p);
+    }
+    public ProductEntity update(Long id, ProductRequestDTO p) {
+        ProductEntity product=findById(id);
+        product.setName(p.getName());
+        product.setPrice(p.getPrice());
+        product.setDescription(p.getDescription());
+        productRepository.update(product);
+        return product;
     }
 }
