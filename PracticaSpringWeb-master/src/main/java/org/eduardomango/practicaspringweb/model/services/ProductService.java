@@ -4,15 +4,17 @@ import org.eduardomango.practicaspringweb.model.DTO.ProductRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.ProductEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.ProductNotFoundException;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
+import org.eduardomango.practicaspringweb.model.mappers.IStructMapper;
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.eduardomango.practicaspringweb.model.repositories.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProductService {
-
+    ///TODO CREAR MAPPER
     private final IRepository<ProductEntity> productRepository;
 
     public ProductService(IRepository<ProductEntity> productRepository) {
@@ -52,12 +54,7 @@ public class ProductService {
     }
 
     public ProductEntity save(ProductRequestDTO p) {
-        ProductEntity product = ProductEntity.builder()
-                .id(productRepository.findAll().getLast().getId() + 1)
-                .name(p.getName())
-                .price(p.getPrice())
-                .description(p.getDescription())
-                .build();
+
 
         productRepository.save(product);
         return product;

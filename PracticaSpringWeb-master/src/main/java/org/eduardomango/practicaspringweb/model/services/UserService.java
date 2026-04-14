@@ -4,6 +4,7 @@ package org.eduardomango.practicaspringweb.model.services;
 import org.eduardomango.practicaspringweb.model.DTO.UserRequestDTO;
 import org.eduardomango.practicaspringweb.model.entities.UserEntity;
 import org.eduardomango.practicaspringweb.model.exceptions.UserNotFoundException;
+import org.eduardomango.practicaspringweb.model.mappers.UserMapper;
 import org.eduardomango.practicaspringweb.model.repositories.IRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,11 @@ public class UserService {
 
     private final IRepository<UserEntity> userRepository;
 
-    public UserService(IRepository<UserEntity> userRepository) {
+    private final UserMapper mapper;
+
+    public UserService(IRepository<UserEntity> userRepository, UserMapper mapper) {
         this.userRepository = userRepository;
+        this.mapper = mapper;
     }
 
     public List<UserEntity> findAll() {
@@ -53,12 +57,7 @@ public class UserService {
         return user;
     }
     public UserEntity save(UserRequestDTO user) {
-        UserEntity newUser=UserEntity.builder()
-                .id(userRepository.findAll().getLast().getId()+1)
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .build();
+        UserEntity newUser=mapper.toEntity(user);
         userRepository.save(newUser);
         return newUser;
     }
